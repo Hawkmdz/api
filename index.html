@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Cotações de Grãos - CEPEA</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f9f9f9;
+      padding: 30px;
+    }
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+    table {
+      width: 60%;
+      margin: 20px auto;
+      border-collapse: collapse;
+      background: #fff;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    th, td {
+      padding: 12px;
+      text-align: center;
+      border-bottom: 1px solid #ddd;
+    }
+    th {
+      background: #4CAF50;
+      color: white;
+    }
+    tr:hover {
+      background: #f1f1f1;
+    }
+    .atualizando {
+      text-align: center;
+      font-size: 14px;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+  <h1>📊 Cotações de Grãos (CEPEA)</h1>
+
+  <table id="tabela-cotacoes">
+    <thead>
+      <tr>
+        <th>Produto</th>
+        <th>Cotação (R$/saca)</th>
+        <th>Data</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <p class="atualizando">Atualizando em tempo real...</p>
+
+  <script>
+    async function carregarCotacoes() {
+      try {
+        // 🔥 Troque pela URL da API no Render
+        let resposta = await fetch("https://SUA-API.onrender.com/cotacoes");
+        let dados = await resposta.json();
+
+        let tabela = document.querySelector("#tabela-cotacoes tbody");
+        tabela.innerHTML = "";
+
+        dados.forEach(item => {
+          let linha = `
+            <tr>
+              <td>${item.produto}</td>
+              <td>${item.cotacao_reais_saca}</td>
+              <td>${item.data}</td>
+            </tr>
+          `;
+          tabela.innerHTML += linha;
+        });
+
+      } catch (erro) {
+        console.error("Erro ao carregar cotações:", erro);
+      }
+    }
+
+    // Carrega ao abrir
+    carregarCotacoes();
+
+    // Atualiza a cada 5 minutos
+    setInterval(carregarCotacoes, 300000);
+  </script>
+</body>
+</html>
